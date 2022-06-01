@@ -12,6 +12,14 @@ This POC focuses of realizing the metadata backup of an application using NFS pr
 
 The E2E flow looks as shown below
   ![](/kahu/MetadataBackupPoc/E2E_Flow.png)
+  
+  ## Environment Details
+  OS version: ubuntu 18.0.4
+  
+  K8S Version: 1.24
+  
+  go version: go1.17.2
+  
 
 ## Execution steps
 
@@ -32,19 +40,14 @@ $ git checkout metadata_backup_poc
 
 * Build binaries of all the necessary components
 ```
-$ CGO_ENABLED=O go build -o _output/bin/kahuserver cmd/kahu/kahuserver.go
-$ CGO_ENABLED=O go build -o _output/bin/metaservice cmd/metaservice/main.go 
-$ CGO_ENABLED=O go build -o _output/bin/nfsprovider providers/nfs_provider/cmd/main.go
+$ CGO_ENABLED=0 go build -o _output/bin/kahuserver cmd/kahu/kahuserver.go
+$ CGO_ENABLED=0 go build -o _output/bin/metaservice cmd/metaservice/main.go 
+$ CGO_ENABLED=0 go build -o _output/bin/nfsprovider providers/nfs_provider/cmd/main.go
 ```
 
 * Build docker image which contains all the above binaries
 ```
 $ docker build -t kahu:v1 .
-```
-
-* Upload image to all nodes in kind cluster. This step may vary based on environment used
-```
-$ kind load docker-image kahu:v1
 ```
 
 * Upload image to all nodes in kind cluster. This step may vary based on environment used
@@ -111,4 +114,6 @@ $ kubectl get backups
 $ cd /mnt/nfs_share/
 $ ls
 ```
+
+
 
